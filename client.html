@@ -9,22 +9,41 @@
     <script src="scripts/config.js"></script>
     <script src="scripts/client.js"></script>
   </head>
-  <body class="w-screen h-screen flex flex-col justify-center items-center">
-    <table>
-      <thead class="bg-sky-500 text-white">
-        <tr>
-          <td class="border border-sky-700 p-2">ID</td>
-          <td class="border border-sky-700 p-2">Nome</td>
-          <td class="border border-sky-700 p-2">CPF</td>
-          <td class="border border-sky-700 p-2">E-mail</td>
-          <td class="border border-sky-700 p-2">Telefone</td>
-          <td class="border border-sky-700 p-2">Atualizar</td>
-          <td class="border border-sky-700 p-2">Apagar</td>
-        </tr>
-      </thead>
-      <tbody id="clients">
-      </tbody>
-    </table>
-    <p class="text-red-500" id="errorText"></p>
+  <body class="w-screen h-screen flex justify-center items-center">
+    <main class="min-h-[30rem] flex flex-col items-start">
+
+      <div class="w-full flex justify-between items-end">
+        <button class="w-28 h-12 p-3 gap-1 border border-sky-700 transition flex justify-center items-center bg-sky-500 hover:bg-sky-700 text-white">
+          <i data-feather="filter"></i>
+          <span>Filtrar</span>
+        </button>
+        <img src="assets/logo.png" alt="Logo hotel" class="w-32 self-center">
+        <span></span>
+        <span></span>
+      </div>
+
+      <div class="max-h-96 overflow-y-auto">
+        <table>
+          <thead class="bg-sky-500 text-white">
+            <tr>
+              <td class="border border-sky-700 p-2">ID</td>
+              <td class="border border-sky-700 p-2">Nome</td>
+              <td class="border border-sky-700 p-2">CPF</td>
+              <td class="border border-sky-700 p-2">E-mail</td>
+              <td class="border border-sky-700 p-2">Telefone</td>
+              <td class="border border-sky-700 p-2">Atualizar</td>
+              <td class="border border-sky-700 p-2">Apagar</td>
+            </tr>
+          </thead>
+          <tbody id="clients">
+          </tbody>
+        </table>
+      </div>
+      <p class="text-red-500" id="errorText"></p>
+
+    </main>
+    <script>
+      feather.replace();
+    </script>
   </body>
 </html>

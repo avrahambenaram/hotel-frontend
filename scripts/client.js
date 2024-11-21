@@ -7,6 +7,7 @@ class ClientTable {
 
   setClientTable(clients) {
     this.clientBody.innerHTML = '';
+    this.clients = clients;
     for (const client of clients) {
       this.addClient(client);
     }
