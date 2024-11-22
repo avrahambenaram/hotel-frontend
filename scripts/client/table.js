@@ -4,6 +4,22 @@ class ClientTable {
     this.clientBody = document.getElementById('clients');
     this.clients = [];
     this.clientApi = clientApi;
+    this.listeners = {
+      'update': [],
+    };
+  }
+
+  addListener(key, cb) {
+    if (key != 'update') {
+      return
+    }
+    this.listeners[key].push(cb);
+  }
+
+  removeAllListeners() {
+    this.listeners = {
+      'update': [],
+    };
   }
 
   async setup() {
@@ -82,7 +98,7 @@ class ClientTable {
     const tdCpf = this.createBaseTd(client.cpf);
     const tdEmail = this.createBaseTd(client.email);
     const tdPhone = this.createBaseTd(client.phone);
-    const tdUpdate = this.createBaseTd(null);
+    const tdUpdate = this.createUpdateTd(client);
     const tdDelete = this.createDeleteTd(client);
 
     const tr = document.createElement('tr');
@@ -96,6 +112,20 @@ class ClientTable {
     tr.appendChild(tdDelete);
 
     return tr
+  }
+
+  createUpdateTd(client) {
+    const btn = document.createElement('button');
+    btn.innerHTML = feather.icons['edit-2'].toSvg({ class: 'text-slate-700' });
+    btn.addEventListener('click', () => {
+      for (const fn of this.listeners['update']) {
+        fn(client);
+      }
+    })
+
+    const td = this.createBaseTd(null);
+    td.appendChild(btn);
+    return td;
   }
 
   createDeleteTd(client) {

@@ -12,4 +12,13 @@ window.onload = () => {
   addForm.addListener(client => {
     clientTable.addClient(client);
   })
+
+  const updateForm = new UpdateForm(clientApi);
+  updateForm.addListener(client => {
+    clientTable.setup();
+  })
+
+  clientTable.addListener('update', client => {
+    updateForm.setup(client);
+  })
 }
