@@ -19,7 +19,7 @@ class ClientTable {
   showClients() {
     this.clientBody.innerHTML = '';
     for (const client of this.clients) {
-      this.addClient(client);
+      this.addClientItem(client);
     }
   }
 
@@ -28,7 +28,7 @@ class ClientTable {
     this.clientBody.innerHTML = '';
     for (const client of this.clients) {
       if (client.id === id) {
-        this.addClient(client);
+        this.addClientItem(client);
         found = true;
       }
     }
@@ -42,7 +42,7 @@ class ClientTable {
     this.clientBody.innerHTML = '';
     for (const client of this.clients) {
       if (client.cpf === cpf) {
-        this.addClient(client);
+        this.addClientItem(client);
         found = true;
       }
     }
@@ -50,24 +50,13 @@ class ClientTable {
       this.errorText.innerText = `Cliente não encontrado com CPF: ${cpf}`;
     }
   }
-
-  askForDeleteClient(client) {
-    const confirmDelete = confirm(`Tem certeza que quer deletar o cliente ${client.name}?`);
-    if (confirmDelete) {
-      this.deleteClient(client);
-    }
-  }
-
-  async deleteClient(client) {
-    try {
-      await this.clientApi.deleteClient(client.id);
-      this.setup();
-    } catch(err) {
-      this.errorText.innerText = err.message;
-    }
-  }
-
+  
   addClient(client) {
+    this.clients.push(client);
+    this.addClientItem(client);
+  }
+
+  addClientItem(client) {
     this.errorText.innerText = '';
     const clientItem = this.createClientItem(client);
     this.clientBody.appendChild(clientItem);
@@ -103,6 +92,22 @@ class ClientTable {
     const td = this.createBaseTd(null);
     td.appendChild(btn);
     return td;
+  }
+
+  askForDeleteClient(client) {
+    const confirmDelete = confirm(`Tem certeza que quer deletar o cliente ${client.name}?`);
+    if (confirmDelete) {
+      this.deleteClient(client);
+    }
+  }
+
+  async deleteClient(client) {
+    try {
+      await this.clientApi.deleteClient(client.id);
+      this.setup();
+    } catch(err) {
+      this.errorText.innerText = err.message;
+    }
   }
 
   createBaseTd(text) {
