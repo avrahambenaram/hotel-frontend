@@ -13,8 +13,8 @@ class ClientFilter {
   setupModalTogglers() {
     this.filter = document.getElementById('filter');
     this.openFilter = document.getElementById('open-filter');
-    this.closeFilter = document.getElementById('close-filter');
     this.openFilter.addEventListener('click', () => this.toggleFilter());
+    this.closeFilter = document.getElementById('close-filter');
     this.closeFilter.addEventListener('click', () => this.toggleFilter());
   }
 

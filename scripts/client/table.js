@@ -1,8 +1,19 @@
 class ClientTable {
-  constructor(errorText) {
+  constructor(errorText, clientApi) {
     this.clientBody = document.getElementById('clients');
     this.clients = [];
     this.errorText = errorText;
+    this.clientApi = clientApi;
+  }
+
+  async setup() {
+    try {
+      const clients = await this.clientApi.getAllClients();
+      this.clients = clients;
+      this.showClients();
+    } catch(err) {
+      this.errorText.innerText = err.message;
+    }
   }
 
   showClients() {
@@ -37,14 +48,6 @@ class ClientTable {
     }
     if (!found) {
       this.errorText.innerText = `Cliente não encontrado com CPF: ${cpf}`;
-    }
-  }
-
-  setClientTable(clients) {
-    this.clientBody.innerHTML = '';
-    this.clients = clients;
-    for (const client of clients) {
-      this.addClient(client);
     }
   }
 
