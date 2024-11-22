@@ -50,6 +50,20 @@ class ClientTable {
       this.errorText.innerText = `Cliente não encontrado com CPF: ${cpf}`;
     }
   }
+
+  removeClient(clientId) {
+    for (const i in this.clients) {
+      if (this.clients[i].id === clientId) {
+        this.clients.splice(i, 1);
+        this.removeClientItem(clientId);
+      }
+    }
+  }
+
+  removeClientItem(clientId) {
+    const item = document.getElementById(`tr-${clientId}`);
+    this.clientBody.removeChild(item);
+  }
   
   addClient(client) {
     this.clients.push(client);
@@ -104,7 +118,7 @@ class ClientTable {
   async deleteClient(client) {
     try {
       await this.clientApi.deleteClient(client.id);
-      this.setup();
+      this.removeClient(client.id);
     } catch(err) {
       this.errorText.innerText = err.message;
     }
