@@ -1,8 +1,8 @@
 class ClientTable {
-  constructor(errorText, clientApi) {
+  constructor(clientApi) {
+    this.errorText = document.getElementById('errorText');
     this.clientBody = document.getElementById('clients');
     this.clients = [];
-    this.errorText = errorText;
     this.clientApi = clientApi;
   }
 

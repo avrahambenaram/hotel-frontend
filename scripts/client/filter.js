@@ -1,8 +1,8 @@
 class ClientFilter {
-  constructor(errorText) {
+  constructor() {
     this.setupModalTogglers();
     this.setupFilterTriggers();
-    this.errorText = errorText;
+    this.errorText = document.getElementById('errorFilter');
     this.listeners = {
       'filter-all': [],
       'filter-id': [],
