@@ -51,6 +51,22 @@ class ClientTable {
     }
   }
 
+  askForDeleteClient(client) {
+    const confirmDelete = confirm(`Tem certeza que quer deletar o cliente ${client.name}?`);
+    if (confirmDelete) {
+      this.deleteClient(client);
+    }
+  }
+
+  async deleteClient(client) {
+    try {
+      await this.clientApi.deleteClient(client.id);
+      this.setup();
+    } catch(err) {
+      this.errorText.innerText = err.message;
+    }
+  }
+
   addClient(client) {
     this.errorText.innerText = '';
     const clientItem = this.createClientItem(client);
@@ -63,6 +79,8 @@ class ClientTable {
     const tdCpf = this.createBaseTd(client.cpf);
     const tdEmail = this.createBaseTd(client.email);
     const tdPhone = this.createBaseTd(client.phone);
+    const tdUpdate = this.createBaseTd(null);
+    const tdDelete = this.createDeleteTd(client);
 
     const tr = document.createElement('tr');
     tr.id = `tr-${client.id}`;
@@ -71,8 +89,20 @@ class ClientTable {
     tr.appendChild(tdCpf);
     tr.appendChild(tdEmail);
     tr.appendChild(tdPhone);
+    tr.appendChild(tdUpdate);
+    tr.appendChild(tdDelete);
 
     return tr
+  }
+
+  createDeleteTd(client) {
+    const btn = document.createElement('button');
+    btn.innerHTML = feather.icons['trash-2'].toSvg({ class: 'text-red-500' });
+    btn.addEventListener('click', () => this.askForDeleteClient(client));
+
+    const td = this.createBaseTd(null);
+    td.appendChild(btn);
+    return td;
   }
 
   createBaseTd(text) {
