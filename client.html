@@ -15,15 +15,7 @@
   <body class="w-screen h-screen flex justify-center items-center">
     <main class="min-h-[30rem] flex flex-col items-start">
 
-      <div class="w-full flex justify-between items-end">
-        <button id="open-filter" class="w-28 h-12 p-3 gap-1 border border-sky-700 transition flex justify-center items-center bg-sky-500 hover:bg-sky-700 text-white">
-          <i data-feather="filter"></i>
-          <span>Filtrar</span>
-        </button>
-        <img src="assets/logo.png" alt="Logo hotel" class="w-32 self-center">
-        <span></span>
-        <span></span>
-      </div>
+      <img src="assets/logo.png" alt="Logo hotel" class="w-32 self-center">
 
       <div class="max-h-96 overflow-y-auto">
         <table>
@@ -36,6 +28,16 @@
               <td class="border border-sky-700 p-2">Telefone</td>
               <td class="border border-sky-700 p-2">Atualizar</td>
               <td class="border border-sky-700 p-2">Apagar</td>
+              <td class="border border-sky-500 bg-sky-500 hover:bg-sky-700 transition">
+                <button id="open-filter" class="w-full h-full text-white p-2">
+                  <i data-feather="filter"></i>
+                </button>
+              </td>
+              <td class="border border-sky-500 bg-sky-500 hover:bg-sky-700 transition">
+                <button id="open-add-client" class="w-full h-full text-white p-2">
+                  <i data-feather="plus"></i>
+                </button>
+              </td>
             </tr>
           </thead>
           <tbody id="clients">
