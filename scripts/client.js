@@ -4,7 +4,6 @@ window.onload = () => {
   clientTable.showClients();
 
   const filter = new ClientFilter();
-  filter.addListener('filter-all', () => clientTable.showClients());
   filter.addListener('filter-id', (id) => clientTable.showClientById(id));
   filter.addListener('filter-cpf', (cpf) => clientTable.showClientByCpf(cpf));
 

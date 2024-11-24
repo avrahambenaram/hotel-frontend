@@ -1,14 +1,15 @@
 class RoomFilter {
   constructor() {
-    this.setupModalTogglers();
-    this.setupFilterTriggers();
-    this.errorText = document.getElementById('errorFilter');
     this.listeners = {
-      'filter-all': [],
       'filter-id': [],
       'filter-number': [],
       'filter-query': [],
     };
+    this.setupModalTogglers();
+    this.setupShowAll();
+    setTimeout(() => {
+      this.searchForQuery();
+    }, 200)
   }
 
   setupModalTogglers() {
@@ -19,24 +20,16 @@ class RoomFilter {
     this.closeFilter.addEventListener('click', () => this.toggleFilter());
   }
 
-  setupFilterTriggers() {
-    this.filterId = document.getElementById('filterId');
-    this.filterId.addEventListener('keyup', (evt) => this.filterByEnter(evt, 'id'));
-    this.filterNumber = document.getElementById('filterNumber');
-    this.filterNumber.addEventListener('keyup', (evt) => this.filterByEnter(evt, 'number'));
-    this.filterForm = document.getElementById('filter-form');
-    this.filterForm.addEventListener('submit', (evt) => this.filterRoomsByQuery(evt));
-
-    this.btnFilterId = document.getElementById('btn-filter-id');
-    this.btnFilterId.addEventListener('click', () => this.filterRoomsById());
-    this.btnFilterNumber = document.getElementById('btn-filter-number');
-    this.btnFilterNumber.addEventListener('click', () => this.filterRoomsByNumber());
-    this.btnFilterAll = document.getElementById('btn-filter-all');
-    this.btnFilterAll.addEventListener('click', () => this.filterAllRooms());
+  toggleFilter() {
+    if (filter.open) {
+      filter.close();
+    } else {
+      filter.showModal();
+    }
   }
 
   addListener(key, callback) {
-    if (key != 'filter-all' && key != 'filter-id' && key != 'filter-number' && key != 'filter-query') {
+    if (key != 'filter-id' && key != 'filter-number' && key != 'filter-query') {
       return;
     }
     this.listeners[key].push(callback);
@@ -44,71 +37,58 @@ class RoomFilter {
 
   removeAllListeners() {
     this.listeners = {
-      'filter-all': [],
       'filter-id': [],
       'filter-number': [],
       'filter-query': [],
     };
   }
 
-  filterByEnter(evt, mode) {
-    if (evt.key === 'Enter') {
-      evt.target.blur();
-      if (mode == 'id') {
-        this.filterRoomsById();
+  setupShowAll() {
+    this.btnFilterAll = document.getElementById('btn-filter-all');
+    this.btnFilterAll.addEventListener('click', () => window.location.search = '');
+  }
+
+  searchForQuery() {
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    const id = params.get('id');
+    const number = params.get('number');
+    if (id) {
+      for (const fn of this.listeners['filter-id']) {
+        fn(parseInt(id));
       }
-      if (mode == 'number') {
-        this.filterRoomsByNumber();
+      return
+    }
+    if (number) {
+      for (const fn of this.listeners['filter-number']) {
+        fn(parseInt(number));
       }
+      return
     }
+
+    const capacity = params.get('capacity');
+    const priceDiary = params.get('priceDiary');
+    const type = params.get('type');
+
+    if (capacity || priceDiary || type) {
+      this.createQuery(capacity, priceDiary, type);
+    }
+
   }
 
-  filterAllRooms() {
-    for (const fn of this.listeners['filter-all']) {
-      fn();
+  createQuery(capacity, priceDiary, type) {
+    const query = {};
+    if (capacity) {
+      query.capacity = parseInt(capacity);
     }
-    this.toggleFilter();
-    this.cleanFields();
-  }
-
-  filterRoomsById() {
-    const filterId = this.filterId.value;
-    for (const fn of this.listeners['filter-id']) {
-      fn(parseInt(filterId));
+    if (type && type != '0') {
+      query.type = parseInt(type);
     }
-    this.toggleFilter();
-    this.cleanFields();
-  }
-
-  filterRoomsByNumber() {
-    const filterNumber = this.filterNumber.value;
-    for (const fn of this.listeners['filter-number']) {
-      fn(parseInt(filterNumber));
+    if (priceDiary) {
+      query.priceDiary = parseFloat(priceDiary);
     }
-    this.toggleFilter();
-    this.cleanFields();
-  }
-
-  filterRoomsByQuery(evt) {
-    evt.preventDefault();
-    const query = Object.fromEntries(new FormData(this.filterForm));
     for (const fn of this.listeners['filter-query']) {
       fn(query);
-    }
-    this.toggleFilter();
-    this.cleanFields();
-  }
-
-  cleanFields() {
-    this.filterId.value = '';
-    this.filterNumber.value = '';
-  }
-
-  toggleFilter() {
-    if (filter.open) {
-      filter.close();
-    } else {
-      filter.showModal();
     }
   }
 }

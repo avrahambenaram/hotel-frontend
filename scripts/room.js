@@ -4,7 +4,6 @@ window.onload = () => {
   roomTable.showRooms();
 
   const filter = new RoomFilter();
-  filter.addListener('filter-all', () => roomTable.showRooms());
   filter.addListener('filter-id', (id) => roomTable.showRoomById(id));
   filter.addListener('filter-number', (number) => roomTable.showRoomByNumber(number));
   filter.addListener('filter-query', (query) => roomTable.showRoomsByQuery(query));
