@@ -7,7 +7,7 @@ class RoomFilter {
       'filter-all': [],
       'filter-id': [],
       'filter-number': [],
-      'filter-type': [],
+      'filter-query': [],
     };
   }
 
@@ -21,18 +21,22 @@ class RoomFilter {
 
   setupFilterTriggers() {
     this.filterId = document.getElementById('filterId');
-    this.filterId.addEventListener('keyup', (evt) => this.filterByEnter(evt));
+    this.filterId.addEventListener('keyup', (evt) => this.filterByEnter(evt, 'id'));
     this.filterNumber = document.getElementById('filterNumber');
-    this.filterNumber.addEventListener('keyup', (evt) => this.filterByEnter(evt));
-    this.filterType = document.getElementById('filterType');
-    this.filterType.addEventListener('keyup', (evt) => this.filterByEnter(evt));
+    this.filterNumber.addEventListener('keyup', (evt) => this.filterByEnter(evt, 'number'));
+    this.filterForm = document.getElementById('filter-form');
+    this.filterForm.addEventListener('submit', (evt) => this.filterRoomsByQuery(evt));
 
-    this.btnFilter = document.getElementById('btn-filter');
-    this.btnFilter.addEventListener('click', () => this.filterRooms());
+    this.btnFilterId = document.getElementById('btn-filter-id');
+    this.btnFilterId.addEventListener('click', () => this.filterRoomsById());
+    this.btnFilterNumber = document.getElementById('btn-filter-number');
+    this.btnFilterNumber.addEventListener('click', () => this.filterRoomsByNumber());
+    this.btnFilterAll = document.getElementById('btn-filter-all');
+    this.btnFilterAll.addEventListener('click', () => this.filterAllRooms());
   }
 
   addListener(key, callback) {
-    if (key != 'filter-all' && key != 'filter-id' && key != 'filter-number' && key != 'filter-type') {
+    if (key != 'filter-all' && key != 'filter-id' && key != 'filter-number' && key != 'filter-query') {
       return;
     }
     this.listeners[key].push(callback);
@@ -43,47 +47,54 @@ class RoomFilter {
       'filter-all': [],
       'filter-id': [],
       'filter-number': [],
-      'filter-type': [],
+      'filter-query': [],
     };
   }
 
-  filterByEnter(evt) {
+  filterByEnter(evt, mode) {
     if (evt.key === 'Enter') {
       evt.target.blur();
-      this.filterRooms();
+      if (mode == 'id') {
+        this.filterRoomsById();
+      }
+      if (mode == 'number') {
+        this.filterRoomsByNumber();
+      }
     }
   }
 
-  filterRooms() {
+  filterAllRooms() {
+    for (const fn of this.listeners['filter-all']) {
+      fn();
+    }
+    this.toggleFilter();
+    this.cleanFields();
+  }
+
+  filterRoomsById() {
     const filterId = this.filterId.value;
+    for (const fn of this.listeners['filter-id']) {
+      fn(parseInt(filterId));
+    }
+    this.toggleFilter();
+    this.cleanFields();
+  }
+
+  filterRoomsByNumber() {
     const filterNumber = this.filterNumber.value;
-    const filterType = this.filterType.value;
+    for (const fn of this.listeners['filter-number']) {
+      fn(parseInt(filterNumber));
+    }
+    this.toggleFilter();
+    this.cleanFields();
+  }
 
-    if (filterId && filterNumber && filterType != '0') {
-      this.errorText.innerText = 'Erro: Digite apenas o ID, Número ou o tipo';
-      return;
+  filterRoomsByQuery(evt) {
+    evt.preventDefault();
+    const query = Object.fromEntries(new FormData(this.filterForm));
+    for (const fn of this.listeners['filter-query']) {
+      fn(query);
     }
-    if (!filterId && !filterNumber && filterType == '0') {
-      for (const fn of this.listeners['filter-all']) {
-        fn();
-      }
-    }
-    if (filterId) {
-      for (const fn of this.listeners['filter-id']) {
-        fn(parseInt(filterId));
-      }
-    }
-    if (filterNumber) {
-      for (const fn of this.listeners['filter-number']) {
-        fn(parseInt(filterNumber));
-      }
-    }
-    if (filterType != '0') {
-      for (const fn of this.listeners['filter-type']) {
-        fn(parseInt(filterType));
-      }
-    }
-
     this.toggleFilter();
     this.cleanFields();
   }
@@ -91,7 +102,6 @@ class RoomFilter {
   cleanFields() {
     this.filterId.value = '';
     this.filterNumber.value = '';
-    this.filterType.value = '0';
   }
 
   toggleFilter() {

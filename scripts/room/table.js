@@ -34,6 +34,18 @@ class RoomTable {
     }
   }
 
+  async showRoomsByQuery(query) {
+    try {
+      this.roomBody.innerHTML = '';
+      const rooms = await this.roomApi.getRoomsByQuery(query);
+      for (const room of rooms) {
+        this.addRoomItem(room);
+      }
+    } catch(err) {
+      this.errorText.innerText = err.message;
+    }
+  }
+
   async showRoomById(id) {
     try {
       this.roomBody.innerHTML = '';

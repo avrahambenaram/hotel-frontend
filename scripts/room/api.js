@@ -12,6 +12,21 @@ class RoomApi {
 
     return await resp.json();
   }
+  
+  async getRoomsByQuery(query) {
+    const q = new URLSearchParams();
+    for (const key in query) {
+      q.append(key, query[key]);
+    }
+
+    const resp = await fetch(`${apiHost}/room?${q.toString()}`);
+    if (!resp.ok) {
+      const data = await resp.text();
+      throw new Error(data);
+    }
+
+    return await resp.json();
+  }
 
   async getRoomById(id) {
     const resp = await fetch(`${apiHost}/room/id/${id}`);
