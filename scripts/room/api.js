@@ -13,6 +13,26 @@ class RoomApi {
     return await resp.json();
   }
 
+  async getRoomById(id) {
+    const resp = await fetch(`${apiHost}/room/id/${id}`);
+    if (!resp.ok) {
+      const data = await resp.text();
+      throw new Error(data);
+    }
+
+    return await resp.json();
+  }
+
+  async getRoomByNumber(number) {
+    const resp = await fetch(`${apiHost}/room/number/${number}`);
+    if (!resp.ok) {
+      const data = await resp.text();
+      throw new Error(data);
+    }
+
+    return await resp.json();
+  }
+
   async addRoom(room) {
     const resp = await fetch(`${apiHost}/room/add`, {
       method: 'POST',

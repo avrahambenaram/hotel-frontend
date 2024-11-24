@@ -2,7 +2,6 @@ class ClientTable {
   constructor(clientApi) {
     this.errorText = document.getElementById('errorText');
     this.clientBody = document.getElementById('clients');
-    this.clients = [];
     this.clientApi = clientApi;
     this.listeners = {
       'update': [],
@@ -22,70 +21,45 @@ class ClientTable {
     };
   }
 
-  async setup() {
+  async showClients() {
     try {
+      this.clientBody.innerHTML = '';
       const clients = await this.clientApi.getAllClients();
-      this.clients = clients;
-      this.showClients();
+      for (const client of clients) {
+        this.addClientItem(client);
+      }
     } catch(err) {
       this.errorText.innerText = err.message;
     }
   }
 
-  showClients() {
-    this.clientBody.innerHTML = '';
-    for (const client of this.clients) {
+  async showClientById(id) {
+    try {
+      this.clientBody.innerHTML = '';
+      const client = await this.clientApi.getClientById(id);
       this.addClientItem(client);
+    } catch(err) {
+      this.errorText.innerText = err.message;
     }
   }
 
-  showClientById(id) {
-    let found = false;
-    this.clientBody.innerHTML = '';
-    for (const client of this.clients) {
-      if (client.id === id) {
-        this.addClientItem(client);
-        found = true;
-      }
-    }
-    if (!found) {
-      this.errorText.innerText = `Cliente não encontrado com ID: ${id}`;
-    }
-  }
-
-  showClientByCpf(cpf) {
-    let found = false;
-    this.clientBody.innerHTML = '';
-    for (const client of this.clients) {
-      if (client.cpf === cpf) {
-        this.addClientItem(client);
-        found = true;
-      }
-    }
-    if (!found) {
-      this.errorText.innerText = `Cliente não encontrado com CPF: ${cpf}`;
-    }
-  }
-
-  removeClient(clientId) {
-    for (const i in this.clients) {
-      if (this.clients[i].id === clientId) {
-        this.clients.splice(i, 1);
-        this.removeClientItem(clientId);
-      }
+  async showClientByCpf(cpf) {
+    try {
+      this.clientBody.innerHTML = '';
+      const client = await this.clientApi.getClientByCpf(cpf);
+      this.addClientItem(client);
+    } catch(err) {
+      this.errorText.innerText = err.message;
     }
   }
 
   removeClientItem(clientId) {
     const item = document.getElementById(`tr-${clientId}`);
-    this.clientBody.removeChild(item);
+    if (item) {
+      this.clientBody.removeChild(item);
+    }
   }
   
-  addClient(client) {
-    this.clients.push(client);
-    this.addClientItem(client);
-  }
-
   addClientItem(client) {
     this.errorText.innerText = '';
     const clientItem = this.createClientItem(client);
@@ -148,7 +122,7 @@ class ClientTable {
   async deleteClient(client) {
     try {
       await this.clientApi.deleteClient(client.id);
-      this.removeClient(client.id);
+      this.removeClientItem(client.id);
     } catch(err) {
       this.errorText.innerText = err.message;
     }

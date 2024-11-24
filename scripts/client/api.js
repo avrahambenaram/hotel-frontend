@@ -13,6 +13,26 @@ class ClientApi {
     return await resp.json();
   }
 
+  async getClientById(id) {
+    const resp = await fetch(`${apiHost}/client/id/${id}`);
+    if (!resp.ok) {
+      const data = await resp.text();
+      throw new Error(data);
+    }
+
+    return await resp.json();
+  }
+
+  async getClientByCpf(cpf) {
+    const resp = await fetch(`${apiHost}/client/cpf/${cpf}`);
+    if (!resp.ok) {
+      const data = await resp.text();
+      throw new Error(data);
+    }
+
+    return await resp.json();
+  }
+
   async addClient(client) {
     const resp = await fetch(`${apiHost}/client/add`, {
       method: 'POST',

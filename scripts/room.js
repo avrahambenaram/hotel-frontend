@@ -1,7 +1,7 @@
 window.onload = () => {
   const roomApi = new RoomApi();
   const roomTable = new RoomTable(roomApi);
-  roomTable.setup();
+  roomTable.showRooms();
 
   const filter = new RoomFilter();
   filter.addListener('filter-all', () => roomTable.showRooms());
@@ -11,12 +11,12 @@ window.onload = () => {
 
   const addForm = new AddForm(roomApi);
   addForm.addListener(room => {
-    roomTable.addRoom(room);
+    roomTable.addRoomItem(room);
   })
 
   const updateForm = new UpdateForm(roomApi);
   updateForm.addListener(room => {
-    roomTable.setup();
+    roomTable.showRooms();
   })
 
   roomTable.addListener('update', room => {

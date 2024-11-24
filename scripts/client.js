@@ -1,7 +1,7 @@
 window.onload = () => {
   const clientApi = new ClientApi();
   const clientTable = new ClientTable(clientApi);
-  clientTable.setup();
+  clientTable.showClients();
 
   const filter = new ClientFilter();
   filter.addListener('filter-all', () => clientTable.showClients());
@@ -10,12 +10,12 @@ window.onload = () => {
 
   const addForm = new AddForm(clientApi);
   addForm.addListener(client => {
-    clientTable.addClient(client);
+    clientTable.addClientItem(client);
   })
 
   const updateForm = new UpdateForm(clientApi);
   updateForm.addListener(client => {
-    clientTable.setup();
+    clientTable.showClients();
   })
 
   clientTable.addListener('update', client => {

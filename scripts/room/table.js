@@ -2,7 +2,6 @@ class RoomTable {
   constructor(roomApi) {
     this.errorText = document.getElementById('errorText');
     this.roomBody = document.getElementById('rooms');
-    this.rooms = [];
     this.roomApi = roomApi;
     this.listeners = {
       'update': [],
@@ -23,84 +22,45 @@ class RoomTable {
     };
   }
 
-  async setup() {
+  async showRooms() {
     try {
+      this.roomBody.innerHTML = '';
       const rooms = await this.roomApi.getAllRooms();
-      this.rooms = rooms;
-      this.showRooms();
+      for (const room of rooms) {
+        this.addRoomItem(room);
+      }
     } catch(err) {
       this.errorText.innerText = err.message;
     }
   }
 
-  showRooms() {
-    this.roomBody.innerHTML = '';
-    for (const room of this.rooms) {
+  async showRoomById(id) {
+    try {
+      this.roomBody.innerHTML = '';
+      const room = await this.roomApi.getRoomById(id);
       this.addRoomItem(room);
+    } catch(err) {
+      this.errorText.innerText = err.message;
     }
   }
 
-  showRoomById(id) {
-    let found = false;
-    this.roomBody.innerHTML = '';
-    for (const room of this.rooms) {
-      if (room.id === id) {
-        this.addRoomItem(room);
-        found = true;
-      }
-    }
-    if (!found) {
-      this.errorText.innerText = `Quarto não encontrado com ID: ${id}`;
-    }
-  }
-
-  showRoomByNumber(number) {
-    let found = false;
-    this.roomBody.innerHTML = '';
-    for (const room of this.rooms) {
-      if (room.number === number) {
-        this.addRoomItem(room);
-        found = true;
-      }
-    }
-    if (!found) {
-      this.errorText.innerText = `Quarto não encontrado com esse número: ${number}`;
-    }
-  }
-
-  showRoomsByType(type) {
-    let found = false;
-    this.roomBody.innerHTML = '';
-    for (const room of this.rooms) {
-      if (room.type === type) {
-        this.addRoomItem(room);
-        found = true;
-      }
-    }
-    if (!found) {
-      this.errorText.innerText = `Não há quartos com este tipo`;
-    }
-  }
-
-  removeRoom(roomId) {
-    for (const i in this.rooms) {
-      if (this.rooms[i].id === roomId) {
-        this.rooms.splice(i, 1);
-        this.removeRoomItem(roomId);
-      }
+  async showRoomByNumber(number) {
+    try {
+      this.roomBody.innerHTML = '';
+      const room = await this.roomApi.getRoomByNumber(number);
+      this.addRoomItem(room);
+    } catch(err) {
+      this.errorText.innerText = err.message;
     }
   }
 
   removeRoomItem(roomId) {
     const item = document.getElementById(`tr-${roomId}`);
-    this.roomBody.removeChild(item);
+    if (item) {
+      this.roomBody.removeChild(item);
+    }
   }
   
-  addRoom(room) {
-    this.rooms.push(room);
-    this.addRoomItem(room);
-  }
-
   addRoomItem(room) {
     this.errorText.innerText = '';
     const roomItem = this.createRoomItem(room);
@@ -164,7 +124,7 @@ class RoomTable {
   async deleteRoom(room) {
     try {
       await this.roomApi.deleteRoom(room.id);
-      this.removeRoom(room.id);
+      this.removeRoomItem(room.id);
     } catch(err) {
       this.errorText.innerText = err.message;
     }
