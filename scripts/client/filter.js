@@ -20,12 +20,16 @@ class ClientFilter {
 
   setupFilterTriggers() {
     this.filterId = document.getElementById('filterId');
-    this.filterId.addEventListener('keyup', (evt) => this.filterByEnter(evt));
+    this.filterId.addEventListener('keyup', (evt) => this.filterByEnter(evt, 'id'));
     this.filterCpf = document.getElementById('filterCpf');
-    this.filterCpf.addEventListener('keyup', (evt) => this.filterByEnter(evt));
+    this.filterCpf.addEventListener('keyup', (evt) => this.filterByEnter(evt, 'cpf'));
 
-    this.btnFilter = document.getElementById('btn-filter');
-    this.btnFilter.addEventListener('click', () => this.filterClients());
+    this.btnFilterId = document.getElementById('btn-filter-id');
+    this.btnFilterId.addEventListener('click', () => this.filterClientsById());
+    this.btnFilterCpf = document.getElementById('btn-filter-cpf');
+    this.btnFilterCpf.addEventListener('click', () => this.filterClientsByCpf());
+    this.btnFilterAll = document.getElementById('btn-filter-all');
+    this.btnFilterAll.addEventListener('click', () => this.filterAllClients());
   }
 
   addListener(key, callback) {
@@ -43,37 +47,40 @@ class ClientFilter {
     };
   }
 
-  filterByEnter(evt) {
+  filterByEnter(evt, mode) {
     if (evt.key === 'Enter') {
       evt.target.blur();
-      this.filterClients();
+      if (mode === 'id') {
+        this.filterClientsById();
+      }
+      if (mode === 'cpf') {
+        this.filterClientsByCpf();
+      }
     }
   }
 
-  filterClients() {
+  filterAllClients() {
+    for (const fn of this.listeners['filter-all']) {
+      fn();
+    }
+    this.toggleFilter();
+    this.cleanFields();
+  }
+
+  filterClientsById() {
     const filterId = this.filterId.value;
+    for (const fn of this.listeners['filter-id']) {
+      fn(parseInt(filterId));
+    }
+    this.toggleFilter();
+    this.cleanFields();
+  }
+
+  filterClientsByCpf() {
     const filterCpf = this.filterCpf.value;
-
-    if (filterId && filterCpf) {
-      this.errorText.innerText = 'Erro: Digite apenas o ID ou apenas o CPF';
-      return;
+    for (const fn of this.listeners['filter-cpf']) {
+      fn(parseInt(filterCpf));
     }
-    if (!filterId && !filterCpf) {
-      for (const fn of this.listeners['filter-all']) {
-        fn();
-      }
-    }
-    if (filterId) {
-      for (const fn of this.listeners['filter-id']) {
-        fn(parseInt(filterId));
-      }
-    }
-    if (filterCpf) {
-      for (const fn of this.listeners['filter-cpf']) {
-        fn(filterCpf);
-      }
-    }
-
     this.toggleFilter();
     this.cleanFields();
   }
