@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reservas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/reservation/api.js"></script>
+    <script src="scripts/reservation/add-form.js"></script>
+    <script src="scripts/reservation/table.js"></script>
+    <script src="scripts/reservation/filter.js"></script>
+    <script src="scripts/reservation.js"></script>
+  </head>
+  <body class="w-screen h-screen flex justify-center items-center">
+    <nav class="w-2/12 h-full bg-sky-500 p-2 flex flex-col items-center">
+      <div class="w-28 h-28 p-2 border-2 border-white mt-12 rounded-full bg-white overflow-hidden">
+        <img
+          src="assets/logo.png"
+          alt="Logo hotel"
+          class="w-28"
+        >
+      </div>
+      <h1 class="text-lg text-white font-bold my-2">Hotel Cachoeira Beira Mar</h1>
+      <ul class="w-full gap-2 flex flex-col items-center">
+        <li class="w-full p-2 rounded-md bg-sky-500 hover:bg-sky-700 hover:translate-x-3 transition">
+          <a
+            href="client.html"
+            class="text-white"
+            >
+            <div class="w-full h-full gap-2 flex items-center">
+              <i data-feather="user-check"></i>
+              Clientes
+            </div>
+	        </a>
+        </li>
+        <li class="w-full p-2 rounded-md bg-sky-500 hover:bg-sky-700 hover:translate-x-3 transition">
+          <a
+            href="room.html"
+            class="text-white"
+            >
+            <div class="w-full h-full gap-2 flex items-center">
+              <i data-feather="tv"></i>
+              Quartos
+            </div>
+	        </a>
+        </li>
+        <li class="w-full p-2 rounded-md translate-x-3 bg-white">
+          <a
+            href="reservation.html"
+            class="text-sky-500 hover:text-sky-800 transition"
+            >
+            <div class="w-full h-full gap-2 flex items-center">
+              <i data-feather="user"></i>
+              Reservas
+            </div>
+	        </a>
+        </li>
+      </ul>
+    </nav>
+    <main class="w-10/12 min-h-[30rem] flex flex-col items-center">
+      <div class="max-h-96 overflow-y-auto">
+        <table>
+          <thead class="bg-sky-500 text-white">
+            <tr>
+              <td class="border border-sky-700 p-2">ID</td>
+              <td class="border border-sky-700 p-2">Check-in</td>
+              <td class="border border-sky-700 p-2">Check-out</td>
+              <td class="border border-sky-700 p-2">Quarto</td>
+              <td class="border border-sky-700 p-2">Cliente</td>
+              <td class="border border-sky-700 p-2">Apagar</td>
+              <td class="border border-sky-500 bg-sky-500 hover:bg-sky-700 transition">
+                <button id="open-filter" class="w-full h-full text-white p-2">
+                  <i data-feather="filter"></i>
+                </button>
+              </td>
+              <td class="border border-sky-500 bg-sky-500 hover:bg-sky-700 transition">
+                <button id="open-add-reservation" class="w-full h-full text-white p-2">
+                  <i data-feather="plus"></i>
+                </button>
+              </td>
+            </tr>
+          </thead>
+          <tbody id="reservations">
+          </tbody>
+        </table>
+      </div>
+      <p class="text-red-500" id="errorText"></p>
+
+    </main>
+
+    <dialog id="filter" class="w-screen h-screen bg-black/25">
+      <main class="w-full h-full flex justify-center items-center">
+        <div class="bg-white rounded p-2">
+          <header class="flex justify-between items-center">
+            <div class="gap-1 text-lg font-semibold flex items-center">
+              <i data-feather="filter"></i>
+              <h3>Filtro</h3>
+            </div>
+            <button id="close-filter">
+              <i data-feather="x"></i>
+            </button>
+          </header>
+          <div class="gap-4 flex">
+            <form class="mt-4 flex flex-col gap-4">
+              <label class="w-full px-2 py-1 gap-2 border border-black rounded flex justify-between items-center">
+                <span class="font-semibold">ID:</span>
+                <input id="filterId" name="id" type="number" placeholder="Ex: 2" class="w-56 outline-0">
+              </label>
+              <button type="button" id="btn-filter-id" class="bg-sky-500 hover:bg-sky-700 transition rounded px-6 py-2 flex self-center justify-center items-center">
+                <span class="text-white">Filtrar</span>
+              </button>
+            </form>
+
+            <div class="w-px h-28 bg-black">
+            </div>
+
+            <form class="mt-4 flex flex-col gap-4">
+              <label class="w-full px-2 py-1 gap-2 border border-black rounded flex justify-between items-center">
+                <span class="font-semibold">ID do Cliente</span>
+                <input name="client" type="number" placeholder="Ex: 2" class="w-56 outline-0">
+              </label>
+              <label class="w-full px-2 py-1 gap-2 border border-black rounded flex justify-between items-center">
+                <span class="font-semibold">ID do Quarto</span>
+                <input name="room" type="number" placeholder="Ex: 4" class="w-56 outline-0">
+              </label>
+              <button type="submit" class="bg-sky-500 hover:bg-sky-700 transition rounded px-6 py-2 flex self-center justify-center items-center">
+                <span class="text-white">Filtrar</span>
+              </button>
+              <button type="button" id="btn-filter-all" class="bg-sky-500 hover:bg-sky-700 transition rounded px-6 py-2 flex self-end justify-center items-center">
+                <span class="text-white">Mostrar todos</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </main>
+    </dialog>
+
+    <dialog id="add-modal" class="w-screen h-screen bg-black/25">
+      <main class="w-full h-full flex justify-center items-center">
+        <div class="bg-white rounded p-2">
+          <header class="flex justify-between items-center">
+            <div class="gap-1 text-lg font-semibold flex items-center">
+              <i data-feather="user"></i>
+              <h3>Criar nova reserva</h3>
+            </div>
+            <button id="close-add-reservation">
+              <i data-feather="x"></i>
+            </button>
+          </header>
+          <form method="POST" id="add-form" class="mt-4 flex flex-col gap-4">
+            <label class="w-full px-2 py-1 gap-2 border border-black rounded flex justify-between items-center">
+              <span class="font-semibold">ID do Cliente</span>
+              <input name="clientId" type="number" placeholder="Ex: 2" class="w-56 outline-0">
+            </label>
+            <label class="w-full px-2 py-1 gap-2 border border-black rounded flex justify-between items-center">
+              <span class="font-semibold">ID do Quarto</span>
+              <input name="roomId" type="number" placeholder="Ex: 2" class="w-56 outline-0">
+            </label>
+            <label class="w-full px-2 py-1 gap-2 border border-black rounded flex justify-between items-center">
+              <span class="font-semibold">Check-in</span>
+              <input name="checkIn" type="datetime-local" class="w-56 outline-0">
+            </label>
+            <label class="w-full px-2 py-1 gap-2 border border-black rounded flex justify-between items-center">
+              <span class="font-semibold">Check-out</span>
+              <input name="checkOut" type="datetime-local" class="w-56 outline-0">
+            </label>
+            <p class="max-w-64 text-red-500 text-md font-semibold" id="errorAdd"></p>
+            <button type="submit" class="bg-sky-500 hover:bg-sky-700 transition rounded px-6 py-2 flex self-center justify-center items-center">
+              <span class="text-white">Criar</span>
+            </button>
+          </form>
+        </div>
+      </main>
+    </dialog>
+
+    <script>
+      feather.replace();
+    </script>
+  </body>
+</html>
