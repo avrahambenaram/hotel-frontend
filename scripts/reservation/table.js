@@ -57,8 +57,8 @@ class ReservationTable {
     const tdId = this.createBaseTd(reservation.id.toString());
     const tdCheckIn = this.createDateTd(reservation.checkIn);
     const tdCheckOut = this.createDateTd(reservation.checkOut);
-    const tdRoom = this.createBaseTd(reservation.roomId.toString());
-    const tdClient = this.createBaseTd(reservation.clientId.toString());
+    const tdRoom = this.createRoomHrefTd(reservation);
+    const tdClient = this.createClientHrefTd(reservation);
     const tdDelete = this.createDeleteTd(reservation);
 
     const tr = document.createElement('tr');
@@ -77,6 +77,30 @@ class ReservationTable {
     const date = new Date(dateStr);
     const text = date.toISOString().split('T').join(' ');
     const td = this.createBaseTd(text);
+    return td;
+  }
+
+  createRoomHrefTd(reservation) {
+    const a = document.createElement('a');
+    a.classList.add('text-sky-500')
+    a.innerText = `${reservation.room.id}: ${reservation.room.number}`;
+    a.href = `room.html?id=${reservation.room.id}`;
+    a.target = '_blank';
+
+    const td = this.createBaseTd(null);
+    td.appendChild(a);
+    return td;
+  }
+
+  createClientHrefTd(reservation) {
+    const a = document.createElement('a');
+    a.classList.add('text-sky-500')
+    a.innerText = `${reservation.client.id}: ${reservation.client.name}`;
+    a.href = `client.html?id=${reservation.client.id}`;
+    a.target = '_blank';
+
+    const td = this.createBaseTd(null);
+    td.appendChild(a);
     return td;
   }
 
