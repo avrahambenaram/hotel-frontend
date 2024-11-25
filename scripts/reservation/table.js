@@ -14,7 +14,7 @@ class ReservationTable {
         this.addReservationItem(reservation);
       }
     } catch(err) {
-      this.errorText.innerText = err.message;
+      this.errorText.textContent = err.message;
     }
   }
 
@@ -26,7 +26,7 @@ class ReservationTable {
         this.addReservationItem(reservation);
       }
     } catch(err) {
-      this.errorText.innerText = err.message;
+      this.errorText.textContent = err.message;
     }
   }
 
@@ -36,7 +36,7 @@ class ReservationTable {
       const reservation = await this.reservationApi.getReservationById(id);
       this.addReservationItem(reservation);
     } catch(err) {
-      this.errorText.innerText = err.message;
+      this.errorText.textContent = err.message;
     }
   }
 
@@ -48,7 +48,7 @@ class ReservationTable {
   }
   
   addReservationItem(reservation) {
-    this.errorText.innerText = '';
+    this.errorText.textContent = '';
     const reservationItem = this.createReservationItem(reservation);
     this.reservationBody.appendChild(reservationItem);
   }
@@ -99,7 +99,7 @@ class ReservationTable {
   createRoomHrefTd(reservation) {
     const a = document.createElement('a');
     a.classList.add('text-sky-500')
-    a.innerText = `${reservation.room.id}: ${reservation.room.number}`;
+    a.textContent = `${reservation.room.id}: ${reservation.room.number}`;
     a.href = `room.html?id=${reservation.room.id}`;
     a.target = '_blank';
 
@@ -111,7 +111,7 @@ class ReservationTable {
   createClientHrefTd(reservation) {
     const a = document.createElement('a');
     a.classList.add('text-sky-500')
-    a.innerText = `${reservation.client.id}: ${reservation.client.name}`;
+    a.textContent = `${reservation.client.id}: ${reservation.client.name}`;
     a.href = `client.html?id=${reservation.client.id}`;
     a.target = '_blank';
 
@@ -142,7 +142,7 @@ class ReservationTable {
       await this.reservationApi.deleteReservation(reservation.id);
       this.removeReservationItem(reservation.id);
     } catch(err) {
-      this.errorText.innerText = err.message;
+      this.errorText.textContent = err.message;
     }
   }
 
@@ -151,7 +151,7 @@ class ReservationTable {
     td.classList.add('border');
     td.classList.add('border-black');
     td.classList.add('p-2');
-    td.innerText = text;
+    td.textContent = text;
     return td
   }
 }

@@ -29,7 +29,7 @@ class ClientTable {
         this.addClientItem(client);
       }
     } catch(err) {
-      this.errorText.innerText = err.message;
+      this.errorText.textContent = err.message;
     }
   }
 
@@ -39,7 +39,7 @@ class ClientTable {
       const client = await this.clientApi.getClientById(id);
       this.addClientItem(client);
     } catch(err) {
-      this.errorText.innerText = err.message;
+      this.errorText.textContent = err.message;
     }
   }
 
@@ -49,7 +49,7 @@ class ClientTable {
       const client = await this.clientApi.getClientByCpf(cpf);
       this.addClientItem(client);
     } catch(err) {
-      this.errorText.innerText = err.message;
+      this.errorText.textContent = err.message;
     }
   }
 
@@ -61,7 +61,7 @@ class ClientTable {
   }
   
   addClientItem(client) {
-    this.errorText.innerText = '';
+    this.errorText.textContent = '';
     const clientItem = this.createClientItem(client);
     this.clientBody.appendChild(clientItem);
   }
@@ -124,7 +124,7 @@ class ClientTable {
       await this.clientApi.deleteClient(client.id);
       this.removeClientItem(client.id);
     } catch(err) {
-      this.errorText.innerText = err.message;
+      this.errorText.textContent = err.message;
     }
   }
 
@@ -133,7 +133,7 @@ class ClientTable {
     td.classList.add('border');
     td.classList.add('border-black');
     td.classList.add('p-2');
-    td.innerText = text;
+    td.textContent = text;
     return td
   }
 }

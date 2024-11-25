@@ -65,7 +65,7 @@ class UpdateForm {
       }
       this.toggleUpdate();
     } catch(err) {
-      this.errorText.innerText = err.message;
+      this.errorText.textContent = err.message;
     }
   }
 }

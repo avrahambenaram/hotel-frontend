@@ -30,7 +30,7 @@ class RoomTable {
         this.addRoomItem(room);
       }
     } catch(err) {
-      this.errorText.innerText = err.message;
+      this.errorText.textContent = err.message;
     }
   }
 
@@ -42,7 +42,7 @@ class RoomTable {
         this.addRoomItem(room);
       }
     } catch(err) {
-      this.errorText.innerText = err.message;
+      this.errorText.textContent = err.message;
     }
   }
 
@@ -52,7 +52,7 @@ class RoomTable {
       const room = await this.roomApi.getRoomById(id);
       this.addRoomItem(room);
     } catch(err) {
-      this.errorText.innerText = err.message;
+      this.errorText.textContent = err.message;
     }
   }
 
@@ -62,7 +62,7 @@ class RoomTable {
       const room = await this.roomApi.getRoomByNumber(number);
       this.addRoomItem(room);
     } catch(err) {
-      this.errorText.innerText = err.message;
+      this.errorText.textContent = err.message;
     }
   }
 
@@ -74,7 +74,7 @@ class RoomTable {
   }
   
   addRoomItem(room) {
-    this.errorText.innerText = '';
+    this.errorText.textContent = '';
     const roomItem = this.createRoomItem(room);
     this.roomBody.appendChild(roomItem);
   }
@@ -138,7 +138,7 @@ class RoomTable {
       await this.roomApi.deleteRoom(room.id);
       this.removeRoomItem(room.id);
     } catch(err) {
-      this.errorText.innerText = err.message;
+      this.errorText.textContent = err.message;
     }
   }
 
@@ -147,7 +147,7 @@ class RoomTable {
     td.classList.add('border');
     td.classList.add('border-black');
     td.classList.add('p-2');
-    td.innerText = text;
+    td.textContent = text;
     return td
   }
 }

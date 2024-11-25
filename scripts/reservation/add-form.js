@@ -51,7 +51,7 @@ class AddForm {
       }
       evt.target.reset();
     } catch(err) {
-      this.errorText.innerText = err.message;
+      this.errorText.textContent = err.message;
     }
   }
 }
