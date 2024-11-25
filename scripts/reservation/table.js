@@ -75,9 +75,25 @@ class ReservationTable {
 
   createDateTd(dateStr) {
     const date = new Date(dateStr);
-    const text = date.toISOString().split('T').join(' ');
-    const td = this.createBaseTd(text);
+    const td = this.createBaseTd(this.treatDate(date));
     return td;
+  }
+
+  treatDate(date) {
+    function treatN(n) {
+      if (n > 9) {
+        return n.toString();
+      } else {
+        return `0${n}`;
+      }
+    }
+
+    const d = treatN(date.getDate());
+    const m = treatN(date.getMonth() + 1);
+    const y = date.getFullYear();
+    const h = treatN(date.getHours());
+    const M = treatN(date.getMinutes());
+    return `${d}/${m}/${y} ${h}:${M}`;
   }
 
   createRoomHrefTd(reservation) {
